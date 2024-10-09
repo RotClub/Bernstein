@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: redis-config
+  namespace: default
+  labels:
+    app: redis
+data:
+  redis.conf: |
+    bind 0.0.0.0
+    port 6379
+    daemonize no
