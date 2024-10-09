@@ -11,6 +11,11 @@ spec:
       labels:
         app: postgres
     spec:
+      restartPolicy: Always
+      volumes:
+      - name: postgres-persistent-storage
+        hostPath:
+          path: /var/lib/postgresql/data
       containers:
       - name: postgres
         image: postgres:12
@@ -18,5 +23,11 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-persistent-storage
         ports:
         - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: postgres-config
