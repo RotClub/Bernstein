@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cadvisor
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: cadvisor
+  template:
+    metadata:
+      labels:
+        app: cadvisor
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+          operator: Exists
+        - key: node-role.kubernetes.io/worker
+          effect: NoSchedule
+          operator: Exists
+      containers:
+        - name: cadvisor
+          image: gcr.io/cadvisor/cadvisor:latest
+          #securityContext:
+          # privileged: true
+          # capabilities:
+          #   add:
+          #     - SYS_PTRACE
+          #     - DAC_READ_SEARCH
+          ports:
+            - containerPort: 8080
+          args:
+            - "-port=8080"
+            - "-disable_metrics=network"
+            - "-disable_metrics=referenced_memory"
+          volumeMounts:
+            # Host information
+            - name: sysfs
+              mountPath: /sys
+              readOnly: true
+            # cgroup information
+            - name: cgroup
+              mountPath: /sys/fs/cgroup
+              readOnly: true
+            # Process information
+            - name: proc
+              mountPath: /proc
+              readOnly: true
+            # IO information
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+      volumes:
+        - name: sysfs
+          hostPath:
+            path: /sys
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: rootfs
+          hostPath:
+            path: /
