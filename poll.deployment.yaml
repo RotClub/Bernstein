@@ -5,7 +5,7 @@ metadata:
   labels:
     app: poll
 data:
-  REDIS_HOST: "redis-service"
+  REDIS_HOST: "redis.dop.io"
 
 ---
 apiVersion: apps/v1
@@ -38,3 +38,10 @@ spec:
         envFrom:
         - configMapRef:
             name: poll-config
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+              matchLabels:
+                app: poll
