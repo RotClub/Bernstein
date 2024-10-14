@@ -18,4 +18,3 @@ spec:
       nodePort: 30042
   selector:
     app: traefik
-    proxy: traefik
