@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-  labels:
-    traefik: "false"
 spec:
   selector:
     matchLabels:
