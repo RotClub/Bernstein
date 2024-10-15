@@ -6,7 +6,7 @@ metadata:
     name: result
 spec:
   rules:
-  - host: result.ingress.k8s
+  - host: result.dop.io
     http:
       paths:
       - pathType: Prefix
