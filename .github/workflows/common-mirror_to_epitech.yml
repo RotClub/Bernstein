@@ -7,8 +7,16 @@ env:
   SRC_REPO: git@github.com:RotClub/Bernstein.git
 
 jobs:
+    echo_repo:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Echo Repository
+              run: |
+                echo "Destination Repository: ${{ github.event.repository.name }}\n"
     mirror-push:
       runs-on: ubuntu-latest
+      if: failure()
       steps:
         - uses: actions/checkout@v4
 

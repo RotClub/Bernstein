@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+  namespace: kube-public
+  labels:
+    app: traefik
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      name: traefik
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik-sa
+      containers:
+        - name: traefik
+          image: traefik:2.7
+          args:
+            - "--api.insecure=true"
+            - "--providers.kubernetescrd"
+            - "--entrypoints.web.address=:80"
+            - "--entrypoints.websecure.address=:443"
+            - "--kubernetes"
+            - "--logLevel=INFO"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+            - name: dashboard
+              containerPort: 8080
+            - name: admin
+              containerPort: 443
+      restartPolicy: Always
