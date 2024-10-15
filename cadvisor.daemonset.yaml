@@ -35,6 +35,9 @@ spec:
             - "-disable_metrics=network"
             - "-disable_metrics=referenced_memory"
           volumeMounts:
+            # Docker information
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
             # Host information
             - name: sysfs
               mountPath: /sys
@@ -52,6 +55,10 @@ spec:
               mountPath: /rootfs
               readOnly: true
       volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
         - name: sysfs
           hostPath:
             path: /sys
