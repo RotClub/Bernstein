@@ -24,7 +24,6 @@ spec:
             - "--api.insecure=true"
             - "--providers.kubernetescrd"
             - "--entrypoints.web.address=:80"
-            - "--entrypoints.websecure.address=:443"
             - "--kubernetes"
             - "--logLevel=INFO"
           imagePullPolicy: IfNotPresent
@@ -33,6 +32,4 @@ spec:
               containerPort: 80
             - name: dashboard
               containerPort: 8080
-            - name: admin
-              containerPort: 443
       restartPolicy: Always
